@@ -29,4 +29,14 @@ class Todo_Controller extends CI_Controller {
           echo 0;
      }
     }
+    public function deleteTask()
+    {
+     $id=$this->input->post('id');
+        $data=$this->Todo_model->deleteInfo($id);
+        if ($data) {
+            echo json_encode(1);
+        } else {
+          echo json_encode(0);
+        }
+    }
 }

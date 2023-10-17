@@ -14,4 +14,9 @@ class Todo_model extends CI_Model
         return $this->db->insert('to_do_list',$data);
 
     }
+    public function deleteInfo($id){
+        $this->db->where('id', $id);
+        $data = $this->db->delete("to_do_list");
+        return $data;
+    }
 }

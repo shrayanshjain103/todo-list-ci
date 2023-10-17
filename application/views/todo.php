@@ -129,7 +129,7 @@
                     {
                         "data": null,
                         "render": function(data, type, row) {
-                            return '<button class="btn btn-danger delete-btn" onclick="deleterec(' + data.id + ')" data-id="' + data.id + '">Delete</button>';
+                            return '<button class="btn btn-danger btn-delete" data-id="' + data.id + '">Delete</button>';
                         }
                     }
                 ]
@@ -150,17 +150,42 @@
                         if (res == 1) {
                             $('#newModal').hide();
                             alert("Task inserted Successfully");
-                             window.location.reload();
+                            window.location.reload();
                         } else {
                             $('#newModal').hide();
                             alert("Task inserted Unsuccessful");
                             window.location.reload();
-                            
+
                         }
                     }
 
                 });
 
+            });
+
+            $('#tasksTable').on('click', '.btn-delete', function() {
+                var taskId=$(this).data('id');
+                $.ajax({
+                    url: '<?php echo base_url('Todo_controller/deleteTask'); ?>',
+                    method: 'POST',
+                    data: {
+                        id: taskId
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data == 1) {
+                            alert('Task deletion succesfully');
+                            window.location.reload();
+                        } else {
+                            alert('Task deletion succesfully');
+                            window.location.reload();
+                        }
+                    },
+                    error: function() {
+                        // Handle AJAX error here
+                        alert("An error occurred while fetching topics.");
+                    }
+                });
             });
         });
     </script>

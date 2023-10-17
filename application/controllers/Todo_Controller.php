@@ -21,7 +21,8 @@ class Todo_Controller extends CI_Controller {
           'status'=> $this->input->post('status')
 
      );
-     if($this->db->insert('to_do_list',$data)){
+     $result=$this->Todo_model->addInfo($data);
+     if($result){
         echo 1;
      }
      else{

@@ -132,6 +132,10 @@
                     [5, 1, 2, 3, 4, 25, 50, 75, 100, -1],
                     [5, 1, 2, 3, 4, 25, 50, 75, 100, 'All']
                 ],
+                columnDefs: [
+                    { orderable: false, targets: [-1,-2,-3] }
+                ],
+
                 "ajax": {
                     "url": "<?= base_url('Todo_controller/showData') ?>",
                     "type": "POST",

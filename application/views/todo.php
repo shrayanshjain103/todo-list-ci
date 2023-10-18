@@ -16,6 +16,9 @@
     <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.3/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.3/dist/sweetalert2.min.css">
+
 </head>
 <style>
     #add_task {
@@ -193,7 +196,7 @@
                         console.log(res);
                         if (res == 1) {
                             $('#newModal').hide();
-                            setTimeout(function () {
+                            setTimeout(function() {
                                 window.location.reload(); // Reload the DataTable after successful deletion
                             }, 1000);
                             toastr.info('Info: Task Insertion Successful', 'Task Added');
@@ -204,7 +207,7 @@
                             $('#newModal').hide();
                             // alert("Task inserted Unsuccessful");
                             // Swal.fire('Success', 'Task inserted Successfully', 'success');
-                            setTimeout(function () {
+                            setTimeout(function() {
                                 window.location.reload(); // Reload the DataTable after successful deletion
                             }, 1000);
                             toastr.warning('Deleted: Task Insertion Unsuccessful', 'Task Not added');
@@ -219,38 +222,78 @@
 
 
             //Ajax used to delete the task
+            // $('#tasksTable').on('click', '.btn-delete', function() {
+            //     var taskId = $(this).data('id');
+            //     $.ajax({
+            //         url: '<?php echo base_url('Todo_controller/deleteTask'); ?>',
+            //         method: 'POST',
+            //         data: {
+            //             id: taskId
+            //         },
+            //         dataType: 'json',
+            //         success: function(data) {
+            //             if (data == 1) {
+            //                 // alert('Task deletion succesfully');
+            //                 // window.location.reload();
+            //                 setTimeout(function () {
+            //                     window.location.reload(); // Reload the DataTable after successful deletion
+            //                 }, 1000);
+            //                 toastr.info('Info: Task Deletion Successful', 'Task Deleted');
+            //             } else {
+            //                 // alert('Task deletion succesfully');
+            //                 // window.location.reload();
+            //                 setTimeout(function () {
+            //                     window.location.reload(); // Reload the DataTable after successful deletion
+            //                 }, 1000);
+            //                 toastr.warning('Info: Task Deletion Unsuccessful', 'Task Not Deleted');
+            //             }
+            //         },
+            //         error: function() {
+            //             // Handle AJAX error here
+            //             alert("An error occurred while fetching topics.");
+            //         }
+            //     });
+            // });
+
+
+            //Ajax used to delete the task
             $('#tasksTable').on('click', '.btn-delete', function() {
                 var taskId = $(this).data('id');
-                $.ajax({
-                    url: '<?php echo base_url('Todo_controller/deleteTask'); ?>',
-                    method: 'POST',
-                    data: {
-                        id: taskId
-                    },
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data == 1) {
-                            // alert('Task deletion succesfully');
-                            // window.location.reload();
-                            setTimeout(function () {
-                                window.location.reload(); // Reload the DataTable after successful deletion
-                            }, 1000);
-                            toastr.info('Info: Task Deletion Successful', 'Task Deleted');
-                        } else {
-                            // alert('Task deletion succesfully');
-                            // window.location.reload();
-                            setTimeout(function () {
-                                window.location.reload(); // Reload the DataTable after successful deletion
-                            }, 1000);
-                            toastr.warning('Info: Task Deletion Unsuccessful', 'Task Not Deleted');
-                        }
-                    },
-                    error: function() {
-                        // Handle AJAX error here
-                        alert("An error occurred while fetching topics.");
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You will not be able to recover this task!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '<?php echo base_url('Todo_controller/deleteTask'); ?>',
+                            method: 'POST',
+                            data: {
+                                id: taskId
+                            },
+                            dataType: 'json',
+                            success: function(data) {
+                                if (data) {
+                                    // Reload the DataTable after successful deletion
+                                    toastr.warning('Deleted: successful', 'Delete');
+                                    dataTable.ajax.reload();
+                                } else {
+                                    toastr.error('Failed to delete task', 'Failed');
+                                    dataTable.ajax.reload();
+                                }
+                            },
+                            error: function() {
+                                toastr.error('An error occurred while deleting the task', 'Failed');
+                            }
+                        });
                     }
                 });
             });
+
             //Ajax used to Edit the task
             $('.close').click(function() {
                 $('#editModal').modal('hide');
@@ -273,14 +316,14 @@
                         if (data == 1) {
                             // alert('Task Updation succesfully');
                             // window.location.reload();
-                            setTimeout(function () {
+                            setTimeout(function() {
                                 window.location.reload(); // Reload the DataTable after successful deletion
                             }, 1000);
                             toastr.info('Info: Task Updation Successful', 'Task Updated');
                         } else {
                             // alert('Task Updation succesfully');
                             // window.location.reload();
-                            setTimeout(function () {
+                            setTimeout(function() {
                                 window.location.reload(); // Reload the DataTable after successful deletion
                             }, 1000);
                             toastr.warning('Info:Task Updation Successful', 'Task Not Updated');
@@ -303,17 +346,17 @@
                     if (data == 1) {
                         // alert('Status has been changed');
                         // window.location.reload();
-                        setTimeout(function () {
-                                window.location.reload(); // Reload the DataTable after successful deletion
-                            }, 1000);
-                            toastr.info('Info: Task Status Changed Successful', 'Task Status Changed');
+                        setTimeout(function() {
+                            window.location.reload(); // Reload the DataTable after successful deletion
+                        }, 1000);
+                        toastr.info('Info: Task Status Changed Successful', 'Task Status Changed');
                     } else {
                         // alert('Status has not been Changed');
                         // window.location.reload();
-                        setTimeout(function () {
-                                window.location.reload(); // Reload the DataTable after successful deletion
-                            }, 1000);
-                            toastr.warning('Info:Task Status changed Unsuccessful', 'Task Status Not Changed');
+                        setTimeout(function() {
+                            window.location.reload(); // Reload the DataTable after successful deletion
+                        }, 1000);
+                        toastr.warning('Info:Task Status changed Unsuccessful', 'Task Status Not Changed');
                     }
                 },
                 error: function() {

@@ -66,25 +66,24 @@
                 <div class="modal-body">
                     <form id="save" action="" method="post">
                         <div class="container">
-                            <label for="Task">Task: </label>
-                            <input type="text" id="task" name="task"></input>
+                            <label for="task" style="font-weight: bold;">Task:</label>
+                            <input type="text" id="task" name="task" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
                         </div>
                         <br>
                         <div class="container">
-                            <label for="discription">Discription: </label>
-                            <input type="text" id="Discription" name="discription"></input>
+                            <label for="discription" style="font-weight: bold;">Description:</label>
+                            <input type="text" id="Discription" name="discription" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
                         </div>
                         <br>
-                        <select id="status" name="status">
-                            <option>Select Status</option>
-                            <option value="1">Completed</option>
-                            <option value="0">Incomplete</option>
+                        <select id="status" name="status" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
+                            <option style="font-weight: bold;">Select Status</option>
+                            <option value="1" style="font-weight: bold; color: green;">Completed</option>
+                            <option value="0" style="font-weight: bold; color: red;">Incomplete</option>
                         </select>
                 </div>
-
                 <div class="modal-footer pop">
                     <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-                    <button type="submit" class="btn btn-primary ">Save changes</button>
+                    <button type="submit" class="btn btn-primary " style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">Save changes</button>
                 </div>
                 </form>
             </div>
@@ -95,8 +94,8 @@
             var dataTable = $('#tasksTable').DataTable({
                 "paging": true,
                 "lengthMenu": [
-                    [1, 2, 3, 4, 25, 50, 75, 100, -1],
-                    [1, 2, 3, 4, 25, 50, 75, 100, 'All']
+                    [5, 1, 2, 3, 4, 25, 50, 75, 100, -1],
+                    [5, 1, 2, 3, 4, 25, 50, 75, 100, 'All']
                 ],
                 "ajax": {
                     "url": "<?= base_url('Todo_controller/showData') ?>",
@@ -164,7 +163,7 @@
             });
 
             $('#tasksTable').on('click', '.btn-delete', function() {
-                var taskId=$(this).data('id');
+                var taskId = $(this).data('id');
                 $.ajax({
                     url: '<?php echo base_url('Todo_controller/deleteTask'); ?>',
                     method: 'POST',

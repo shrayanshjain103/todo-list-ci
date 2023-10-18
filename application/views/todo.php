@@ -105,7 +105,7 @@
                         <div>
                             <label for="editTask" style="font-weight: bold;">Edit the Task:</label>
                             <input type="text" id="editTask" name="title" val="" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;" />
-                            <input type="text" id="taskid" name="id" val="" hidden/>
+                            <input type="text" id="taskid" name="id" val="" hidden />
                         </div>
                         <br>
                         <div>
@@ -113,7 +113,7 @@
                             <input type="text" id="editDiscription" name="discription" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;" />
                         </div>
                         <br>
-                   
+
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" id="saveEdit">Save Changes</button>
@@ -148,9 +148,9 @@
                         data: "status",
                         "render": function(data, type, row) {
                             if (data == 0) {
-                                return '<button class="btn btn-warning">Incomplete</button>';
+                                return '<button class="btn btn-warning" onclick="changestat(' + row.id + ',0)">Incomplete</button>';
                             } else {
-                                return '<button class="btn btn-success">Completed</button>';
+                                return '<button class="btn btn-success"  onclick="changestat(' + row.id + ',1)">Completed</button>';
                             }
                         }
                     },
@@ -225,24 +225,25 @@
                     }
                 });
             });
+            //Ajax used to Edit the task
             $('.close').click(function() {
                 $('#editModal').modal('hide');
             });
             $(document).on('click', '.edit-btn', function() {
-                 var id = $('.edit-btn').attr('data-id');
-                 $('#taskid').val(id);
+                var id = $('.edit-btn').attr('data-id');
+                $('#taskid').val(id);
                 $("#editModal").modal('show');
             });
             $("#editForm").submit(function(event) {
                 event.preventDefault();
                 var formData = $(this).serialize();
                 var id = $('#taskid').val();
-               $.ajax({
-                   url:"<?php echo base_url();?>Todo_controller/editTask",
-                   data:formData,
-                //    dataType:"json",
-                method: 'POST',
-                success: function(data) {
+                $.ajax({
+                    url: "<?php echo base_url(); ?>Todo_controller/editTask",
+                    data: formData,
+                    //    dataType:"json",
+                    method: 'POST',
+                    success: function(data) {
                         if (data == 1) {
                             alert('Task Updation succesfully');
                             window.location.reload();
@@ -255,9 +256,29 @@
                         // Handle AJAX error here
                         alert("An error occurred while fetching topics.");
                     }
-               });
+                });
             });
+
         });
+
+        function changestat(id, status) {
+            $.ajax({
+                url: "<?php echo base_url() ?>Todo_Controller/editStatus/" + id +"/"+ status,
+                method:"GET",
+                success: function(data){
+                    if(data==1){
+                        alert('Status has been changed');
+                        window.location.reload();
+                    }else{
+                        alert('Status has not been Changed');
+                        window.location.reload();
+                    }
+                },
+                error:function(){
+                  alert("An error occured while performing this task");
+                }
+            });
+        }
     </script>
 </body>
 

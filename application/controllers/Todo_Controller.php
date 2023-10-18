@@ -53,4 +53,15 @@ class Todo_Controller extends CI_Controller {
             echo 0;
         }
     }
+    public function editStatus($id,$status){
+        $updatestat = $status == 1 ? 0 : 1;
+        $this->db->where('id', $id);
+        $this->db->set('status', $updatestat);
+        $data = $this->db->update('to_do_list');
+        if($data==1){
+            echo 1;
+        } else{
+            echo 0;
+        }
+    }
 }

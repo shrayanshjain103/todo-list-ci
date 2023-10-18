@@ -104,19 +104,21 @@
                         <br>
                         <div>
                             <label for="editTask" style="font-weight: bold;">Edit the Task:</label>
-                            <input type="text" id="editTask" name="Task" val="" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;" />
+                            <input type="text" id="editTask" name="title" val="" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;" />
+                            <input type="text" id="taskid" name="id" val="" hidden/>
                         </div>
                         <br>
                         <div>
-                            <label for="editoption1" style="font-weight: bold;">Edit the Description:</label>
-                            <input type="text" id="editoption1" name="option1" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;" />
+                            <label for="Discription" style="font-weight: bold;">Edit the Discription:</label>
+                            <input type="text" id="editDiscription" name="discription" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;" />
                         </div>
                         <br>
-                    </form>
+                   
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="saveEdit">Save Changes</button>
+                    <button type="submit" class="btn btn-primary" id="saveEdit">Save Changes</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -227,9 +229,34 @@
                 $('#editModal').modal('hide');
             });
             $(document).on('click', '.edit-btn', function() {
+                 var id = $('.edit-btn').attr('data-id');
+                 $('#taskid').val(id);
                 $("#editModal").modal('show');
             });
-
+            $("#editForm").submit(function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                var id = $('#taskid').val();
+               $.ajax({
+                   url:"<?php echo base_url();?>Todo_controller/editTask",
+                   data:formData,
+                //    dataType:"json",
+                method: 'POST',
+                success: function(data) {
+                        if (data == 1) {
+                            alert('Task Updation succesfully');
+                            window.location.reload();
+                        } else {
+                            alert('Task Updation succesfully');
+                            window.location.reload();
+                        }
+                    },
+                    error: function() {
+                        // Handle AJAX error here
+                        alert("An error occurred while fetching topics.");
+                    }
+               });
+            });
         });
     </script>
 </body>

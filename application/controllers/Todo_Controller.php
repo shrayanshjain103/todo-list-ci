@@ -39,4 +39,18 @@ class Todo_Controller extends CI_Controller {
           echo json_encode(0);
         }
     }
+    public function editTask(){
+    
+    // $data=array(
+    //     'title'=> $this->input->post('title'),
+    //     'discription'=> $this->input->post('discription')
+    // );
+      $data = $this->input->post();
+      $data=$this->Todo_model->updateInfo($data);
+        if($data == 1){
+            echo 1;
+        }else{
+            echo 0;
+        }
+    }
 }

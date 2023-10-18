@@ -89,7 +89,40 @@
             </div>
         </div>
     </div>
+    <div class="modal" id="editModal" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="editModalLabel">Edit Question</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add your form elements for editing here -->
+                    <form id="editForm" action="" method="post">
+                        <br>
+                        <div>
+                            <label for="editTask" style="font-weight: bold;">Edit the Task:</label>
+                            <input type="text" id="editTask" name="Task" val="" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;" />
+                        </div>
+                        <br>
+                        <div>
+                            <label for="editoption1" style="font-weight: bold;">Edit the Description:</label>
+                            <input type="text" id="editoption1" name="option1" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;" />
+                        </div>
+                        <br>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveEdit">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        //Ajax used to show table data in datatable
         $(document).ready(function() {
             var dataTable = $('#tasksTable').DataTable({
                 "paging": true,
@@ -122,7 +155,7 @@
                     {
                         data: null,
                         "render": function(data, type, row) {
-                            return '<button class="btn btn-info edit-btn" onclick="modalopen(' + data.id + ')" data-id="' + data.id + '">Edit</button>';
+                            return '<button class="btn btn-info edit-btn" data-id="' + data.id + '">Edit</button>';
                         }
                     },
                     {
@@ -133,6 +166,8 @@
                     }
                 ]
             });
+
+            //Ajax used to Add the task
             $("#openTaskForm").click(function() {
                 $("#newModal").modal('show');
             });
@@ -162,6 +197,8 @@
 
             });
 
+
+            //Ajax used to delete the task
             $('#tasksTable').on('click', '.btn-delete', function() {
                 var taskId = $(this).data('id');
                 $.ajax({
@@ -186,6 +223,13 @@
                     }
                 });
             });
+            $('.close').click(function() {
+                $('#editModal').modal('hide');
+            });
+            $(document).on('click', '.edit-btn', function() {
+                $("#editModal").modal('show');
+            });
+
         });
     </script>
 </body>

@@ -13,6 +13,9 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js">
     </script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 </head>
 <style>
     #add_task {
@@ -132,9 +135,10 @@
                     [5, 1, 2, 3, 4, 25, 50, 75, 100, -1],
                     [5, 1, 2, 3, 4, 25, 50, 75, 100, 'All']
                 ],
-                columnDefs: [
-                    { orderable: false, targets: [-1,-2,-3] }
-                ],
+                columnDefs: [{
+                    orderable: false,
+                    targets: [-1, -2, -3]
+                }],
 
                 "ajax": {
                     "url": "<?= base_url('Todo_controller/showData') ?>",
@@ -189,12 +193,22 @@
                         console.log(res);
                         if (res == 1) {
                             $('#newModal').hide();
-                            alert("Task inserted Successfully");
-                            window.location.reload();
+                            setTimeout(function () {
+                                window.location.reload(); // Reload the DataTable after successful deletion
+                            }, 1000);
+                            toastr.info('Info: Task Insertion Successful', 'Task Added');
+                            // alert("Task inserted Successfully");
+                            // Swal.fire('Success', 'Task inserted Successfully', 'success');
+                            // window.location.reload();
                         } else {
                             $('#newModal').hide();
-                            alert("Task inserted Unsuccessful");
-                            window.location.reload();
+                            // alert("Task inserted Unsuccessful");
+                            // Swal.fire('Success', 'Task inserted Successfully', 'success');
+                            setTimeout(function () {
+                                window.location.reload(); // Reload the DataTable after successful deletion
+                            }, 1000);
+                            toastr.warning('Deleted: Task Insertion Unsuccessful', 'Task Not added');
+                            // window.location.reload();
 
                         }
                     }
@@ -216,11 +230,19 @@
                     dataType: 'json',
                     success: function(data) {
                         if (data == 1) {
-                            alert('Task deletion succesfully');
-                            window.location.reload();
+                            // alert('Task deletion succesfully');
+                            // window.location.reload();
+                            setTimeout(function () {
+                                window.location.reload(); // Reload the DataTable after successful deletion
+                            }, 1000);
+                            toastr.info('Info: Task Deletion Successful', 'Task Deleted');
                         } else {
-                            alert('Task deletion succesfully');
-                            window.location.reload();
+                            // alert('Task deletion succesfully');
+                            // window.location.reload();
+                            setTimeout(function () {
+                                window.location.reload(); // Reload the DataTable after successful deletion
+                            }, 1000);
+                            toastr.warning('Info: Task Deletion Unsuccessful', 'Task Not Deleted');
                         }
                     },
                     error: function() {
@@ -249,11 +271,19 @@
                     method: 'POST',
                     success: function(data) {
                         if (data == 1) {
-                            alert('Task Updation succesfully');
-                            window.location.reload();
+                            // alert('Task Updation succesfully');
+                            // window.location.reload();
+                            setTimeout(function () {
+                                window.location.reload(); // Reload the DataTable after successful deletion
+                            }, 1000);
+                            toastr.info('Info: Task Updation Successful', 'Task Updated');
                         } else {
-                            alert('Task Updation succesfully');
-                            window.location.reload();
+                            // alert('Task Updation succesfully');
+                            // window.location.reload();
+                            setTimeout(function () {
+                                window.location.reload(); // Reload the DataTable after successful deletion
+                            }, 1000);
+                            toastr.warning('Info:Task Updation Successful', 'Task Not Updated');
                         }
                     },
                     error: function() {
@@ -267,19 +297,27 @@
 
         function changestat(id, status) {
             $.ajax({
-                url: "<?php echo base_url() ?>Todo_Controller/editStatus/" + id +"/"+ status,
-                method:"GET",
-                success: function(data){
-                    if(data==1){
-                        alert('Status has been changed');
-                        window.location.reload();
-                    }else{
-                        alert('Status has not been Changed');
-                        window.location.reload();
+                url: "<?php echo base_url() ?>Todo_Controller/editStatus/" + id + "/" + status,
+                method: "GET",
+                success: function(data) {
+                    if (data == 1) {
+                        // alert('Status has been changed');
+                        // window.location.reload();
+                        setTimeout(function () {
+                                window.location.reload(); // Reload the DataTable after successful deletion
+                            }, 1000);
+                            toastr.info('Info: Task Status Changed Successful', 'Task Status Changed');
+                    } else {
+                        // alert('Status has not been Changed');
+                        // window.location.reload();
+                        setTimeout(function () {
+                                window.location.reload(); // Reload the DataTable after successful deletion
+                            }, 1000);
+                            toastr.warning('Info:Task Status changed Unsuccessful', 'Task Status Not Changed');
                     }
                 },
-                error:function(){
-                  alert("An error occured while performing this task");
+                error: function() {
+                    alert("An error occured while performing this task");
                 }
             });
         }

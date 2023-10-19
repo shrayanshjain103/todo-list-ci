@@ -401,7 +401,7 @@
                             }, 1000);
                             toastr.info('Info: Task Updation Successful', 'Task Updated');
                         } else {
-                            toastr.warning('Info: Task Updation Unsuccessful', 'Task Not Updated');
+                            toastr.warning('Info: New and Previous value can not be same', 'Task Not Updated');
                         }
                     },
                     error: function() {

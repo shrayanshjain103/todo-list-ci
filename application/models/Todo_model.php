@@ -15,7 +15,7 @@ class Todo_model extends CI_Model
     public function fatchall()
     {
         $query = $this->db->get('to_do_list');
-        $result=$query->result();
+        $result = $query->result();
         return  $result;
     }
     public function addInfo($data)
@@ -45,12 +45,14 @@ class Todo_model extends CI_Model
         }
     }
 
-   // used to count the data avilable in the database
-    public function countAllData(){
+    // used to count the data avilable in the database
+    public function countAllData()
+    {
         return $this->db->count_all('to_do_list');
     }
-     // used to set the linit per page
-    public function getPaginatedData($limit, $offset){
+    // used to set the linit per page
+    public function getPaginatedData($limit, $offset)
+    {
         $this->db->limit($limit, $offset);
         $query = $this->db->get('to_do_list');
         return $query->result();

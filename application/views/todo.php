@@ -143,8 +143,8 @@
             var dataTable = $('#tasksTable').DataTable({
                 "paging": true,
                 "lengthMenu": [
-                    [ 1, 2, 3, 4, 25, 50, 75, 100, -1],
-                    [ 1, 2, 3, 4, 25, 50, 75, 100, 'All']
+                    [1, 2, 3, 4, 25, 50, 75, 100, -1],
+                    [1, 2, 3, 4, 25, 50, 75, 100, 'All']
                 ],
                 columnDefs: [{
                     orderable: false,
@@ -155,7 +155,7 @@
                     "url": "<?= base_url('Todo_controller/showData') ?>",
                     "type": "POST",
                     "dataType": "json",
-                   // dataSrc: ""
+                    // dataSrc: ""
                 },
                 "columns": [{
                         data: "title"
@@ -470,7 +470,7 @@
 
         // Function to validate the "Add Task" form
         function validateAddTaskForm() {
-            $('#task-error').text('');   
+            $('#task-error').text('');
             $('#discription-error').text('');
             $('#status-error').text('');
             var task = document.getElementById("task").value;

@@ -26,7 +26,7 @@ class Todo_Controller extends CI_Controller
     // }
 
 
-   // used to show data in datatable
+    // used to show data in datatable
     public function showData()
     {
         $config = [

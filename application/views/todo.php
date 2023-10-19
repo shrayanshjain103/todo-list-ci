@@ -168,7 +168,7 @@
                     {
                         data: null,
                         "render": function(data, type, row) {
-                            return '<button class="btn btn-info edit-btn" data-id="' + data.id + '">Edit</button>&nbsp; <button class="btn btn-danger btn-delete" data-id="' + data.id + '">Delete</button>';
+                            return '<button class="btn btn-info edit-btn shrayansh" data-id="' + data.id + '">Edit</button>&nbsp; <button class="btn btn-danger btn-delete" data-id="' + data.id + '">Delete</button>';
                         }
                     },
                     // {
@@ -299,7 +299,7 @@
                 $('#editModal').modal('hide');
             });
             $(document).on('click', '.edit-btn', function() {
-                var id = $('.edit-btn').attr('data-id');
+                var id = $(this).attr('data-id');
                 $('#taskid').val(id);
                 $("#editModal").modal('show');
                 $.ajax({

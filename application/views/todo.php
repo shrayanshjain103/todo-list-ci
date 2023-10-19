@@ -74,18 +74,24 @@
                         <div class="container">
                             <label for="task" style="font-weight: bold;">Task:</label>
                             <input type="text" id="task" name="task" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
+                            <span id="task-error" style="color: red;"></span>
                         </div>
                         <br>
                         <div class="container">
                             <label for="discription" style="font-weight: bold;">Description:</label>
                             <input type="text" id="Discription" name="discription" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
+                            <span id="discription-error" style="color: red;"></span>
                         </div>
                         <br>
-                        <select id="status" name="status" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
-                            <option style="font-weight: bold;">Select Status</option>
-                            <option value="1" style="font-weight: bold; color: green;">Completed</option>
-                            <option value="0" style="font-weight: bold; color: red;">Incomplete</option>
-                        </select>
+                        <div>
+                            <select id="status" name="status" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
+                                <option style="font-weight: bold;">Select Status</option>
+                                <option value="1" style="font-weight: bold; color: green;">Completed</option>
+                                <option value="0" style="font-weight: bold; color: red;">Incomplete</option>
+                            </select>
+                            <span id="status-error" style="color: red;"></span>
+                        </div>
+
                 </div>
                 <div class="modal-footer pop">
                     <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
@@ -112,11 +118,13 @@
                             <label for="editTask" style="font-weight: bold;">Edit the Task:</label>
                             <input type="text" id="editTask" name="title" val="" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;" />
                             <input type="text" id="taskid" name="id" val="" hidden />
+                            <span id="editTask-error" style="color:red"></span>
                         </div>
                         <br>
                         <div>
                             <label for="Discription" style="font-weight: bold;">Edit the Discription:</label>
                             <input type="text" id="editDiscription" name="discription" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;" />
+                            <span id="editDiscription-error" style="color:red"></span>
                         </div>
                         <br>
 
@@ -184,8 +192,47 @@
             $("#openTaskForm").click(function() {
                 $("#newModal").modal('show');
             });
+            // $("#save").submit(function(event) {
+            //     event.preventDefault();
+            //     var formData = $(this).serialize();
+            //     $.ajax({
+            //         type: "POST",
+            //         url: "<?php echo base_url(); ?>Todo_Controller/addnewTask",
+            //         dataType: "json",
+            //         data: formData,
+            //         success: function(res) {
+            //             console.log(res);
+            //             if (res == 1) {
+            //                 $('#newModal').hide();
+            //                 setTimeout(function() {
+            //                     window.location.reload(); // Reload the DataTable after successful deletion
+            //                 }, 1000);
+            //                 toastr.info('Info: Task Insertion Successful', 'Task Added');
+            //                 // alert("Task inserted Successfully");
+            //                 // Swal.fire('Success', 'Task inserted Successfully', 'success');
+            //                 // window.location.reload();
+            //             } else {
+            //                 $('#newModal').hide();
+            //                 // alert("Task inserted Unsuccessful");
+            //                 // Swal.fire('Success', 'Task inserted Successfully', 'success');
+            //                 setTimeout(function() {
+            //                     window.location.reload(); // Reload the DataTable after successful deletion
+            //                 }, 1000);
+            //                 toastr.warning('Deleted: Task Insertion Unsuccessful', 'Task Not added');
+            //                 // window.location.reload();
+
+            //             }
+            //         }
+
+            //     });
+
+            // });
+            // Ajax used to Add the task
             $("#save").submit(function(event) {
                 event.preventDefault();
+                if (!validateAddTaskForm()) {
+                    return;
+                }
                 var formData = $(this).serialize();
                 $.ajax({
                     type: "POST",
@@ -195,30 +242,18 @@
                     success: function(res) {
                         console.log(res);
                         if (res == 1) {
-                            $('#newModal').hide();
+                            $('#newModal').modal('hide'); // Close the modal on successful submission
                             setTimeout(function() {
-                                window.location.reload(); // Reload the DataTable after successful deletion
+                                window.location.reload(); // Reload the DataTable after successful submission
                             }, 1000);
                             toastr.info('Info: Task Insertion Successful', 'Task Added');
-                            // alert("Task inserted Successfully");
-                            // Swal.fire('Success', 'Task inserted Successfully', 'success');
-                            // window.location.reload();
                         } else {
-                            $('#newModal').hide();
-                            // alert("Task inserted Unsuccessful");
-                            // Swal.fire('Success', 'Task inserted Successfully', 'success');
-                            setTimeout(function() {
-                                window.location.reload(); // Reload the DataTable after successful deletion
-                            }, 1000);
-                            toastr.warning('Deleted: Task Insertion Unsuccessful', 'Task Not added');
-                            // window.location.reload();
-
+                            toastr.warning('Info: Task Insertion Unsuccessful', 'Task Not Added');
                         }
                     }
-
                 });
-
             });
+
 
 
             //Ajax used to delete the task
@@ -294,7 +329,7 @@
                 });
             });
 
-            //Ajax used to Edit the task
+            //Ajax used to append the task data in edit modal
             $('.close').click(function() {
                 $('#editModal').modal('hide');
             });
@@ -309,41 +344,68 @@
                     },
                     method: "POST",
                     dataType: "JSON",
-                    success: function(data){
-                       $('#editTask').val(data.title);
-                       $('#editDiscription').val(data.discription);
+                    success: function(data) {
+                        $('#editTask').val(data.title);
+                        $('#editDiscription').val(data.discription);
                     }
                 });
             });
+            //Ajax used to Edit the task
+            // $("#editForm").submit(function(event) {
+            //     event.preventDefault();
+            //     var formData = $(this).serialize();
+            //     var id = $('#taskid').val();
+            //     $.ajax({
+            //         url: "<?php echo base_url(); ?>Todo_controller/editTask",
+            //         data: formData,
+            //         //    dataType:"json",
+            //         method: 'POST',
+            //         success: function(data) {
+            //             if (data == 1) {
+            //                 // alert('Task Updation succesfully');
+            //                 // window.location.reload();
+            //                 setTimeout(function() {
+            //                     window.location.reload(); // Reload the DataTable after successful deletion
+            //                 }, 1000);
+            //                 toastr.info('Info: Task Updation Successful', 'Task Updated');
+            //             } else {
+            //                 // alert('Task Updation succesfully');
+            //                 // window.location.reload();
+            //                 setTimeout(function() {
+            //                     window.location.reload(); // Reload the DataTable after successful deletion
+            //                 }, 1000);
+            //                 toastr.warning('Info:Task Updation Unsuccessful', 'Task Not Updated');
+            //             }
+            //         },
+            //         error: function() {
+            //             // Handle AJAX error here
+            //             alert("An error occurred while fetching topics.");
+            //         }
+            //     });
+            // });
             $("#editForm").submit(function(event) {
                 event.preventDefault();
+                if (!validateEditTaskForm()) {
+                    return;
+                }
                 var formData = $(this).serialize();
-                var id = $('#taskid').val();
                 $.ajax({
                     url: "<?php echo base_url(); ?>Todo_controller/editTask",
                     data: formData,
-                    //    dataType:"json",
                     method: 'POST',
                     success: function(data) {
                         if (data == 1) {
-                            // alert('Task Updation succesfully');
-                            // window.location.reload();
+                            $('#editModal').modal('hide'); // Close the modal on successful submission
                             setTimeout(function() {
-                                window.location.reload(); // Reload the DataTable after successful deletion
+                                window.location.reload(); // Reload the DataTable after successful submission
                             }, 1000);
                             toastr.info('Info: Task Updation Successful', 'Task Updated');
                         } else {
-                            // alert('Task Updation succesfully');
-                            // window.location.reload();
-                            setTimeout(function() {
-                                window.location.reload(); // Reload the DataTable after successful deletion
-                            }, 1000);
-                            toastr.warning('Info:Task Updation Unsuccessful', 'Task Not Updated');
+                            toastr.warning('Info: Task Updation Unsuccessful', 'Task Not Updated');
                         }
                     },
                     error: function() {
-                        // Handle AJAX error here
-                        alert("An error occurred while fetching topics.");
+                        toastr.error('An error occurred while updating the task', 'Failed');
                     }
                 });
             });
@@ -376,6 +438,72 @@
                 }
             });
         }
+
+
+        // Function to validate the "Edit Task" form
+        function validateEditTaskForm() {
+            $('#editTask-error').text('');
+            $('#editDiscription-error').text('');
+            var editTask = document.getElementById("editTask").value;
+            var editDiscription = document.getElementById("editDiscription").value;
+
+            var isValid = true;
+
+            if (editTask.trim() === "") {
+                document.getElementById("editTask-error").textContent = "Task is required.";
+                isValid = false;
+            }
+
+            if (editDiscription.trim() === "") {
+                document.getElementById("editDiscription-error").textContent = "Discription is required.";
+                isValid = false;
+            }
+
+            return isValid;
+        }
+        // Event listener to validate the "Edit Task" form on submission
+        document.getElementById("editForm").addEventListener("submit", function(event) {
+            if (!validateEditTaskForm()) {
+                event.preventDefault(); // Prevent form submission if validation fails
+            }
+        });
+
+        // Function to validate the "Add Task" form
+        function validateAddTaskForm() {
+            $('#task-error').text('');   
+            $('#discription-error').text('');
+            $('#status-error').text('');
+            var task = document.getElementById("task").value;
+            var discription = document.getElementById("Discription").value;
+            var status = document.getElementById("status").value;
+
+            var isValid = true;
+
+            // Reset error messages
+            if (task.trim() === "") {
+                document.getElementById("task-error").textContent = "Task is required.";
+                isValid = false;
+            }
+
+            if (discription.trim() === "") {
+                document.getElementById("discription-error").textContent = "Discription is required.";
+                isValid = false;
+            }
+
+            if (status === "Select Status") {
+                document.getElementById("status-error").textContent = "Status is required.";
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Event listener to validate the "Add Task" form on submission
+        document.getElementById("save").addEventListener("submit", function(event) {
+            if (!validateAddTaskForm()) {
+                event.preventDefault(); // Prevent form submission if validation fails
+            }
+        });
     </script>
 </body>
 

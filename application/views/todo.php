@@ -338,7 +338,7 @@
                             setTimeout(function() {
                                 window.location.reload(); // Reload the DataTable after successful deletion
                             }, 1000);
-                            toastr.warning('Info:Task Updation Successful', 'Task Not Updated');
+                            toastr.warning('Info:Task Updation Unsuccessful', 'Task Not Updated');
                         }
                     },
                     error: function() {

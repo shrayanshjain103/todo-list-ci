@@ -7,7 +7,7 @@ class Todo_Controller extends CI_Controller
         $this->load->model('Todo_model');
         $this->load->helper('form');
         $this->load->library('form_validation'); // Load the Form Validation library
-
+        $this->load->library('pagination');
     }
 
     public function index()
@@ -15,10 +15,38 @@ class Todo_Controller extends CI_Controller
         $this->load->view('todo');
     }
 
+
+
+
+    // used to show data in datatable
+    // public function showData()
+    // {
+    //     $data = $this->Todo_model->fatchall();
+    //     echo json_encode($data);
+    // }
+
+
+   // used to show data in datatable
     public function showData()
     {
-        $data = $this->Todo_model->fatchall();
-        echo json_encode($data);
+        $config = [
+
+            'base_url' => base_url('Todo_controller/fatchall/'),
+            'total_rows' => $this->Todo_model->countAllData(),
+            'per_page' => 10,
+            'uri_segment' => 3
+        ];
+        $this->pagination->initialize($config);
+
+        $page = $this->uri->segment(3, 0);
+        $offset = $page > 0 ? ($page - 1) * $config['per_page'] : 0;
+        $data = $this->Todo_model->getPaginatedData($config['per_page'], $offset);
+        $response = [
+            'data' => $data,
+            'pagination' => $this->pagination->create_links()
+        ];
+
+        echo json_encode($response);
     }
 
     //Used to delete Task 
@@ -27,9 +55,9 @@ class Todo_Controller extends CI_Controller
         $this->form_validation->set_rules('task', 'task', 'required');
         $this->form_validation->set_rules('discription', 'discription', 'required');
         $this->form_validation->set_rules('status', 'status', 'required');
-        if ($this->form_validation->run() === FALSE)
-        {  
-            echo 0;die;
+        if ($this->form_validation->run() === FALSE) {
+            echo 0;
+            die;
         }
 
         $data = array(
@@ -62,13 +90,13 @@ class Todo_Controller extends CI_Controller
     //Used to edit the Task
     public function editTask()
     {
-       
+
         $this->form_validation->set_rules('title', 'title', 'required');
         $this->form_validation->set_rules('discription', 'discription', 'required');
-        if ($this->form_validation->run() === FALSE)
-        {  
-           // echo"jefwndkiw";die;
-            echo 0;die;
+        if ($this->form_validation->run() === FALSE) {
+            // echo"jefwndkiw";die;
+            echo 0;
+            die;
         }
         $data = $this->input->post();
         $this->Todo_model->updateInfo($data);

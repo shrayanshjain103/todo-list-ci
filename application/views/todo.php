@@ -143,8 +143,8 @@
             var dataTable = $('#tasksTable').DataTable({
                 "paging": true,
                 "lengthMenu": [
-                    [5, 1, 2, 3, 4, 25, 50, 75, 100, -1],
-                    [5, 1, 2, 3, 4, 25, 50, 75, 100, 'All']
+                    [ 1, 2, 3, 4, 25, 50, 75, 100, -1],
+                    [ 1, 2, 3, 4, 25, 50, 75, 100, 'All']
                 ],
                 columnDefs: [{
                     orderable: false,
@@ -155,7 +155,7 @@
                     "url": "<?= base_url('Todo_controller/showData') ?>",
                     "type": "POST",
                     "dataType": "json",
-                    dataSrc: ""
+                   // dataSrc: ""
                 },
                 "columns": [{
                         data: "title"

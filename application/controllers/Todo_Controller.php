@@ -64,4 +64,9 @@ class Todo_Controller extends CI_Controller {
             echo 0;
         }
     }
+    public function showInfo(){
+        $id=$_POST['id'];
+        $data=$this->db->get_where('to_do_list',['id'=>$id])->row_array();
+        echo json_encode($data);
+    }
 }

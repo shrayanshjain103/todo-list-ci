@@ -53,7 +53,7 @@
                     <th>Description</th>
                     <th>status</th>
                     <th>Edit Information</th>
-                    <th>Delete Information</th>
+                    <!-- <th>Delete Information</th> -->
                 </tr>
             </thead>
             <tbody>
@@ -168,15 +168,15 @@
                     {
                         data: null,
                         "render": function(data, type, row) {
-                            return '<button class="btn btn-info edit-btn" data-id="' + data.id + '">Edit</button>';
+                            return '<button class="btn btn-info edit-btn" data-id="' + data.id + '">Edit</button>&nbsp; <button class="btn btn-danger btn-delete" data-id="' + data.id + '">Delete</button>';
                         }
                     },
-                    {
-                        "data": null,
-                        "render": function(data, type, row) {
-                            return '<button class="btn btn-danger btn-delete" data-id="' + data.id + '">Delete</button>';
-                        }
-                    }
+                    // {
+                    //     "data": null,
+                    //     "render": function(data, type, row) {
+                    //         return '<button class="btn btn-danger btn-delete" data-id="' + data.id + '">Delete</button>';
+                    //     }
+                    // }
                 ]
             });
 
@@ -302,6 +302,18 @@
                 var id = $('.edit-btn').attr('data-id');
                 $('#taskid').val(id);
                 $("#editModal").modal('show');
+                $.ajax({
+                    url: "<?php echo base_url() ?>Todo_controller/showInfo",
+                    data: {
+                        id: id
+                    },
+                    method: "POST",
+                    dataType: "JSON",
+                    success: function(data){
+                       $('#editTask').val(data.title);
+                       $('#editDiscription').val(data.discription);
+                    }
+                });
             });
             $("#editForm").submit(function(event) {
                 event.preventDefault();
@@ -337,7 +349,7 @@
             });
 
         });
-
+        //USED TO UPDATE THE STATUS 
         function changestat(id, status) {
             $.ajax({
                 url: "<?php echo base_url() ?>Todo_Controller/editStatus/" + id + "/" + status,

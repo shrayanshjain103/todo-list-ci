@@ -383,6 +383,8 @@
             //         }
             //     });
             // });
+
+            //Ajax used to Edit the task
             $("#editForm").submit(function(event) {
                 event.preventDefault();
                 if (!validateEditTaskForm()) {
